@@ -1,16 +1,17 @@
 N, M = map(int, input().split())
-s = []
+
+num_arr = []
 
 
-def n_m():
-    if len(s) == M:
-        print(' '.join(map(str, s)))
+def dfs(index):
+    if index == M:
+        print(*num_arr)
         return
     for i in range(1, N + 1):
-        if i not in s:
-            s.append(i)
-            n_m()
-            s.pop()
+        if i not in num_arr:
+            num_arr.append(i)
+            dfs(index + 1)
+            num_arr.pop()
 
 
-n_m()
+dfs(0)
