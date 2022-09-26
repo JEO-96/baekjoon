@@ -1,34 +1,35 @@
 import sys
 
-N = int(sys.stdin.readline())
-S = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
-start_team = []
-min_diff = float("inf")
+n = int(sys.stdin.readline())
+s = [list(map(int, sys.stdin.readline().split())) for i in range(n)]
+team1 = []
+
+min_score = float("inf")
 
 
-def dfs(index):
-    if index == N // 2:
-        global min_diff
-        start_score = 0
-        link_score = 0
-        link_team = []
-        for i in range(N):
-            if i not in start_team:
-                link_team.append(i)
-        for i in range(N // 2 - 1):
-            for j in range(i + 1, N // 2):
-                start_score += S[start_team[i]][start_team[j]] + S[start_team[j]][start_team[i]]
-                link_score += S[link_team[i]][link_team[j]] + S[link_team[j]][link_team[i]]
-        min_diff = min(min_diff, abs(start_score - link_score))
+def dfs(index: int):
+    if index == n // 2:
+        team2 = []
+        global min_score
+        score1 = 0
+        score2 = 0
+        for i in range(n):
+            if i not in team1:
+                team2.append(i)
+        for i in range(n // 2 - 1):
+            for j in range(i + 1, n // 2):
+                score1 += s[team1[i]][team1[j]] + s[team1[j]][team1[i]]
+                score2 += s[team2[i]][team2[j]] + s[team2[j]][team2[i]]
+        min_score = min(min_score, abs(score1 - score2))
         return
-    for i in range(N):
-        if i not in start_team:
-            if len(start_team) > 0 and start_team[-1] > i:
-                continue
-            start_team.append(i)
+    for i in range(n):
+        if len(team1) > 0 and i < team1[len(team1) - 1]:
+            continue
+        if i not in team1:
+            team1.append(i)
             dfs(index + 1)
-            start_team.pop()
+            team1.pop()
 
 
 dfs(0)
-print(min_diff)
+print(min_score)
